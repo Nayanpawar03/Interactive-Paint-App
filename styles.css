@@ -1,0 +1,412 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    /* More standard font stack */
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background-color: #f0f2f5;
+    /* Lighter, more neutral background */
+}
+
+/* Removed animated background for a cleaner look */
+/* body {
+    background: linear-gradient(-45deg, #ff004c, #00c3ff, #42ff00, #ffc800);
+    background-size: 400% 400%;
+    animation: bgShift 15s ease infinite;
+    display: flex;
+    flex-direction: column;
+} */
+
+/* @keyframes bgShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+} */
+
+/* Container for layout */
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 15px;
+    /* Slightly reduced padding */
+    gap: 15px;
+}
+
+/* Refined toolbar */
+.toolbar {
+    /* backdrop-filter: blur(5px); */
+    /* Removed blur for cleaner look */
+    background-color: #ffffff;
+    /* White background */
+    border-radius: 12px;
+    /* Softer radius */
+    padding: 15px 20px;
+    /* Adjusted padding */
+    color: #333;
+    /* Darker text for contrast */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    /* Softer shadow */
+    border: 1px solid #e0e0e0;
+    /* Subtle border */
+}
+
+h1 {
+    font-size: 1.5rem;
+    /* Slightly smaller title */
+    margin-bottom: 15px;
+    /* Adjusted margin */
+    color: #1a73e8;
+    /* Accent color for title */
+    font-weight: 600;
+    text-shadow: none;
+    /* Removed text shadow */
+}
+
+.tools {
+    display: flex;
+    gap: 12px;
+    /* Adjusted gap */
+    flex-wrap: wrap;
+    align-items: center;
+    /* Align items vertically centered */
+    /* padding-bottom: 10px; */
+    /* Removed bottom padding */
+}
+
+.tool-selector,
+.color-picker,
+.thickness-control {
+    display: flex;
+    align-items: center;
+    /* Align label and input horizontally */
+    gap: 8px;
+}
+
+/* Ensure consistent layout for specific tool controls */
+.tool-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+label {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 0;
+    /* Removed bottom margin as items are centered */
+}
+
+/* Consistent styling for all controls */
+.tool-btn,
+select,
+input[type="number"],
+input[type="color"] {
+    padding: 6px 10px;
+    /* Adjusted padding */
+    border: 1px solid #ccc;
+    /* Subtle border */
+    border-radius: 6px;
+    /* Softer radius */
+    background-color: #f8f9fa;
+    /* Light background */
+    color: #333;
+    font-size: 0.9rem;
+    /* Slightly smaller font */
+    box-shadow: none;
+    /* Removed individual shadows */
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    /* Smooth transitions */
+}
+
+input[type="color"] {
+    padding: 2px;
+    /* Adjust padding specifically for color input */
+    height: 32px;
+    /* Match height roughly */
+    width: 40px;
+    vertical-align: middle;
+}
+
+input[type="number"] {
+    width: 60px;
+    /* Specific width for number input */
+}
+
+.tool-btn:hover,
+select:hover,
+input[type="number"]:hover,
+input[type="color"]:hover {
+    background-color: #e9ecef;
+    /* Hover effect */
+    border-color: #bbb;
+}
+
+.tool-btn:active,
+select:active {
+    background-color: #dee2e6;
+    /* Active state */
+}
+
+/* Style for the currently active tool */
+.active-tool {
+    border-color: #1a73e8;
+    /* Accent color border */
+    background-color: #e8f0fe;
+    /* Light accent background */
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    /* Subtle inset shadow */
+}
+
+/* Removed margin-bottom as align-items: center handles alignment */
+/* .tool-btn {
+    margin-bottom: 0;
+} */
+
+/* Canvas area */
+.canvas-container {
+    flex-grow: 1;
+    position: relative;
+    border-radius: 10px;
+    /* Slightly smaller radius */
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    /* Softer shadow */
+    border: 1px solid #d0d0d0;
+    /* Slightly darker border */
+}
+
+canvas {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 10px;
+    /* Match container radius */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+  html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f0f2f5, #e0e4e8);
+  }
+  
+  /* Container and toolbar */
+  .container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 15px;
+    gap: 15px;
+  }
+  .toolbar {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 15px 20px;
+    color: #333;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e0e0e0;
+    position: relative;
+    z-index: 10;
+  }
+  .toolbar h1 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #1a73e8;
+    font-weight: 600;
+    position: relative;
+  }
+  .toolbar h1::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 50px;
+    height: 4px;
+    background: linear-gradient(90deg, #1a73e8, #34a853);
+    border-radius: 2px;
+  }
+  .tools {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .tool-selector,
+  .color-picker,
+  .thickness-control,
+  .tool-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  label {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  .tool-btn,
+  select,
+  input[type="number"],
+  input[type="color"] {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f8f9fa;
+    color: #333;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+  }
+  .tool-btn:hover,
+  select:hover,
+  input[type="number"]:hover,
+  input[type="color"]:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+  }
+  .tool-btn:active,
+  select:active {
+    background-color: #dee2e6;
+    transform: translateY(0);
+  }
+  
+  /* Canvas container with gradient border */
+  .canvas-container {
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+    border: 4px solid;
+    border-radius: 12px;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(90deg, #ff6a00, #ee0979, #ff6a00);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+  canvas {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 8px;
+  }
+
+  /* Reset & Variables */
+:root {
+  --primary: #4e54c8;
+  --secondary: #8f94fb;
+  --bg: #f0f2f5;
+  --toolbar-bg: rgba(255,255,255,0.8);
+  --btn-bg: #ffffff;
+  --btn-hover: #f1f3f5;
+  --grid-color: rgba(0,0,0,0.1);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; background: var(--bg); font-family: 'Segoe UI', sans-serif; overflow:hidden; }
+
+/* Container Layout */
+.container { display:flex; flex-direction:column; height:100%; padding:12px; gap:12px; }
+
+/* Toolbar */
+.toolbar {
+  backdrop-filter: blur(10px);
+  background: var(--toolbar-bg);
+  border-radius:12px;
+  padding:12px 16px;
+  display:flex; align-items:center; flex-wrap:wrap;
+  gap:8px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.1);
+}
+.toolbar h1 {
+  flex:1 1 100%; font-size:1.8rem; color: var(--primary);
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+.tools { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+.tool-group { display:flex; align-items:center; gap:4px; }
+label { font-size:0.9rem; color:#333; }
+select, input[type="number"], input[type="color"] {
+  padding:6px; border:1px solid #ccc; border-radius:6px;
+  background:#fff; font-size:0.9rem;
+  transition: border-color .2s;
+}
+select:focus, input[type="number"]:focus, input[type="color"]:focus { border-color: var(--primary); outline:none; }
+
+/* Toggle Switch */
+.switch { position: relative; display: inline-block; width:40px; height:20px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+  background: #ccc; transition: .4s; border-radius: 20px;
+}
+.slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px;
+  background: white; transition: .4s; border-radius: 50%;
+}
+input:checked + .slider { background: var(--primary); }
+input:checked + .slider:before { transform: translateX(20px); }
+
+/* Buttons */
+.tool-btn {
+  padding:8px 14px; border:none; border-radius:8px;
+  background: var(--btn-bg); color:#333; font-size:0.9rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  cursor:pointer; transition: transform .1s, box-shadow .2s;
+}
+.tool-btn.primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary)); color:#fff;
+}
+.tool-btn:hover {
+  background: var(--btn-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.tool-btn.primary:hover {
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
+}
+.tool-btn:active { transform: translateY(0); box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+
+/* Canvas Container & Animated Border */
+.canvas-container {
+  position:relative; flex:1; border-radius:12px;
+  overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,0.1);
+}
+.canvas-container::before {
+  content: "";
+  position: absolute; top:-4px; left:-4px; right:-4px; bottom:-4px;
+  z-index: -1;
+  border-radius:16px;
+  background: linear-gradient(90deg, #ff6a00, #ee0979, #ff6a00);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+}
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Grid Overlay */
+.grid-overlay {
+  position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;
+  background-image:
+    linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+  background-size: 20px 20px;
+  display:none;
+}
+
+canvas {
+  width:100%; height:100%; display:block;
+}

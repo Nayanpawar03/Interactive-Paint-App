@@ -1,0 +1,91 @@
+const canvas = document.getElementById('paintCanvas');
+const ctx = canvas.getContext('2d');
+const clearBtn = document.getElementById('clearBtn');
+const colorInput = document.getElementById('colorInput');
+
+// Set canvas size to match CSS dimensions
+function resizeCanvas() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+}
+
+// Initial resize
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+// Drawing state
+let isDrawing = false;
+let startPoint = null;
+let endPoint = null;
+
+// Bresenham's Line Algorithm
+function drawLineBresenham(x1, y1, x2, y2, color) {
+    let dx = Math.abs(x2 - x1);
+    let dy = Math.abs(y2 - y1);
+    let sx = (x1 < x2) ? 1 : -1;
+    let sy = (y1 < y2) ? 1 : -1;
+    let err = dx - dy;
+
+    ctx.fillStyle = color;
+    
+    while (true) {
+        ctx.fillRect(x1, y1, 1, 1); // Draw pixel
+
+        if (x1 === x2 && y1 === y2) break;
+        
+        let e2 = 2 * err;
+        if (e2 > -dy) {
+            err -= dy;
+            x1 += sx;
+        }
+        if (e2 < dx) {
+            err += dx;
+            y1 += sy;
+        }
+    }
+}
+
+// Event Listeners
+canvas.addEventListener('mousedown', (e) => {
+    isDrawing = true;
+    const rect = canvas.getBoundingClientRect();
+    startPoint = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+    };
+});
+
+canvas.addEventListener('mousemove', (e) => {
+    if (!isDrawing) return;
+    
+    const rect = canvas.getBoundingClientRect();
+    endPoint = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+    };
+
+    // Clear canvas and redraw
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawLineBresenham(
+        Math.round(startPoint.x),
+        Math.round(startPoint.y),
+        Math.round(endPoint.x),
+        Math.round(endPoint.y),
+        colorInput.value
+    );
+});
+
+canvas.addEventListener('mouseup', () => {
+    isDrawing = false;
+    startPoint = null;
+    endPoint = null;
+});
+
+canvas.addEventListener('mouseleave', () => {
+    isDrawing = false;
+});
+
+// Clear canvas
+clearBtn.addEventListener('click', () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}); 
