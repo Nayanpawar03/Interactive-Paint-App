@@ -5,6 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Interactive Paint - Enhanced UI</title>
   <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <style>
+
+body {
+    margin: 0;
+    padding: 0;
+    animation: rgbBackground 20s ease infinite;
+    background: linear-gradient(270deg, #ff0057, #00c6ff, #8e2de2, #ff6ec4);
+    background-size: 800% 800%;
+  }
+
+  @keyframes rgbBackground {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+    .toolbar h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.5rem;
+      background: linear-gradient(90deg, #ff0062, #3c89ee, #ff0062);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0 0 1rem 0;
+      letter-spacing: 1px;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -27,6 +53,7 @@
             <optgroup label="Others">
               <option value="text">Text</option>
               <option value="fill">Bucket Fill</option>
+              
             </optgroup>
           </select>
         </div>

@@ -79,6 +79,10 @@ canvas.addEventListener('mousedown', e => {
   if (activeTool === 'fill') { bucketFill(x, y, colorInput.value); saveState(); return; }
   if (activeTool === 'text') { const txt = prompt('Enter text:'); if (txt) { ctx.fillStyle = colorInput.value; ctx.font = `${parseInt(fontSizeInput.value,10)}px Arial`; ctx.fillText(txt, x, y); saveState(); } return; }
 
+
+ 
+
+
   if (activeTool === 'brush') {
     isDrawing = true;
     brushPoints = [{x,y}];
@@ -106,18 +110,18 @@ canvas.addEventListener('mousemove', e => {
   const col  = colorInput.value;
   const th   = parseInt(thicknessInput.value, 10);
 
-  if (activeTool === 'brush') {
-    brushPoints.push({x,y});
-    if (brushPoints.length >= 2) {
-      const p0 = brushPoints[brushPoints.length-2];
-      const p1 = brushPoints[brushPoints.length-1];
-      const cp = { x:(p0.x+p1.x)/2, y:(p0.y+p1.y)/2 };
-      ctx.beginPath(); ctx.moveTo(p0.x,p0.y);
-      ctx.quadraticCurveTo(p0.x,p0.y, cp.x,cp.y);
-      ctx.stroke();
+ 
+  
+    if (activeTool === 'brush') {
+      brushPoints.push({x, y});
+      if (brushPoints.length >= 2) {
+        const p0 = brushPoints[brushPoints.length - 2];
+        const p1 = brushPoints[brushPoints.length - 1];
+        drawInterpolatedLine(p0, p1, col, th);
+      }
+      return;
     }
-    return;
-  }
+    
 
   if (activeTool === 'eraser') { ctx.lineTo(x, y); ctx.stroke(); return; }
 
@@ -170,6 +174,10 @@ function drawLine(x1,y1,x2,y2,color,th) {
     if (e2 < dx)  { err += dx; y1 += sy; }
   }
 }
+
+
+
+
 
 function liangBarsky(x0,y0,x1,y1, xmin,ymin,xmax,ymax) {
   const p = [-(x1-x0), x1-x0, -(y1-y0), y1-y0];
@@ -239,6 +247,27 @@ function sutherlandHodgman(subject, clipRect) {
 function isInside(pt, edge) {
   return (edge.x2 - edge.x1)*(pt.y - edge.y1) - (edge.y2 - edge.y1)*(pt.x - edge.x1) >= 0;
 }
+
+
+
+function drawInterpolatedLine(p0, p1, color, thickness) {
+  const dx = p1.x - p0.x;
+  const dy = p1.y - p0.y;
+  const distance = Math.sqrt(dx * dx + dy * dy);
+  const steps = Math.floor(distance / 1); // 1px step
+
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const x = p0.x + dx * t;
+    const y = p0.y + dy * t;
+
+    ctx.beginPath();
+    ctx.arc(x, y, thickness / 2, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+  }
+}
+
 
 function intersect(A,B,edge) {
   const {x1,y1,x2,y2} = edge;
