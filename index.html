@@ -45,7 +45,7 @@ body {
               <option value="eraser">Eraser</option>
             </optgroup>
             <optgroup label="Shapes">
-              <option value="line">Line</option>
+              <option value="line" selected>Line</option>
               <option value="rectangle">Rectangle</option>
               <option value="circle">Circle</option>
               <option value="triangle">Triangle</option>
@@ -53,10 +53,20 @@ body {
             <optgroup label="Others">
               <option value="text">Text</option>
               <option value="fill">Bucket Fill</option>
-              
             </optgroup>
           </select>
         </div>
+  
+        <!-- ✨ NEW Brush Style Dropdown -->
+        <div class="tool-group" id="brushStyleControl" style="display: none;">
+          <label for="brushStyle">Brush Style:</label>
+          <select id="brushStyle">
+            <option value="round">Round</option>
+            <option value="spray">Spray</option>
+            <option value="calligraphy">Calligraphy</option>
+          </select>
+        </div>
+  
         <div class="tool-group">
           <label for="colorInput">Color:</label>
           <input type="color" id="colorInput" value="#000000">
@@ -87,6 +97,7 @@ body {
       <canvas id="paintCanvas"></canvas>
     </div>
   </div>
+  
   <script src="script.js"></script>
 </body>
 </html>
