@@ -54,11 +54,14 @@ function updateUndoRedo(){
   undoBtn.disabled = historyIndex <= 0;
   redoBtn.disabled = historyIndex >= historyStack.length - 1;
 }
+const brushStyleControl = document.getElementById('brushStyleControl');
 
-function updateUI(){
+function updateUI() {
   fontSizeControl.style.display = (activeTool === 'text') ? 'flex' : 'none';
   thicknessControl.style.display = (activeTool === 'text' || activeTool === 'fill') ? 'none' : 'flex';
+  brushStyleControl.style.display = (activeTool === 'brush') ? 'flex' : 'none';
 }
+
 
 window.addEventListener('load',   initCanvas);
 window.addEventListener('resize', resizeCanvas);
@@ -112,15 +115,27 @@ canvas.addEventListener('mousemove', e => {
 
  
   
-    if (activeTool === 'brush') {
-      brushPoints.push({x, y});
-      if (brushPoints.length >= 2) {
-        const p0 = brushPoints[brushPoints.length - 2];
-        const p1 = brushPoints[brushPoints.length - 1];
+  const style = document.getElementById('brushStyle').value;
+
+  if (activeTool === 'brush') {
+    brushPoints.push({x, y});
+    const p0 = brushPoints[brushPoints.length - 2];
+    const p1 = brushPoints[brushPoints.length - 1];
+  
+    switch (style) {
+      case 'round':
         drawInterpolatedLine(p0, p1, col, th);
-      }
-      return;
+        break;
+      case 'spray':
+        drawSprayBrush(x, y, col, th);
+        break;
+      case 'calligraphy':
+        drawCalligraphyBrush(x, y, col, th);
+        break;
     }
+    return;
+  }
+  
     
 
   if (activeTool === 'eraser') { ctx.lineTo(x, y); ctx.stroke(); return; }
@@ -300,6 +315,54 @@ function bucketFill(sx,sy,hex) {
   }
   ctx.putImageData(img,0,0);
 }
+
+
+
+
+
+
+
+function drawSprayBrush(x, y, color, thickness) {
+  const density = 20;
+  const radius = thickness * 1.5;
+
+  ctx.fillStyle = color;
+
+  for (let i = 0; i < density; i++) {
+    const angle = Math.random() * 2 * Math.PI;
+    const r = Math.random() * radius;
+    const dx = r * Math.cos(angle);
+    const dy = r * Math.sin(angle);
+    ctx.fillRect(x + dx, y + dy, 1, 1);
+  }
+}
+
+function drawCalligraphyBrush(x, y, color, thickness) {
+  // Calculate the angle between the previous two brush points
+  const angle = Math.atan2(y - brushPoints[brushPoints.length - 2].y, x - brushPoints[brushPoints.length - 2].x);
+  
+  // Increase the effect of thickness variation based on the angle (for deeper effect)
+  const width = thickness + Math.abs(Math.sin(angle) * thickness * 2); // Increase the multiplier (2 for more depth)
+
+  ctx.lineWidth = width; // Adjust the thickness dynamically
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = color;
+  
+  // Drawing a smooth curved line between points using quadratic curve
+  const p0 = brushPoints[brushPoints.length - 2];
+  const p1 = brushPoints[brushPoints.length - 1];
+  const cp = { x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2 }; // Control point for curve
+  
+  ctx.beginPath();
+  ctx.moveTo(p0.x, p0.y);
+  ctx.quadraticCurveTo(cp.x, cp.y, p1.x, p1.y);
+  ctx.stroke();
+}
+
+
+
+
 function getPixel(d,x,y,w){ const i=(y*w+x)*4; return [d[i],d[i+1],d[i+2],d[i+3]]; }
 function matchColor(d,x,y,t,w){ const i=(y*w+x)*4; return d[i]===t[0]&&d[i+1]===t[1]&&d[i+2]===t[2]&&d[i+3]===t[3]; }
 function setPixel(d,x,y,c,w){ const i=(y*w+x)*4; d[i]=c.r; d[i+1]=c.g; d[i+2]=c.b; d[i+3]=255; }
