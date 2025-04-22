@@ -9,9 +9,12 @@ const undoBtn        = document.getElementById('undoBtn');
 const redoBtn        = document.getElementById('redoBtn');
 const fontSizeInput  = document.getElementById('fontSizeInput');
 const fontSizeControl= document.getElementById('fontSizeControl');
-const thicknessControl = document.querySelector('.tool-group:nth-child(3)');
+const thicknessControl= document.getElementById('thicknessControl');
+//const thicknessControl = document.querySelector('.tool-group:nth-child(3)');
 const gridToggle     = document.getElementById('gridToggle');
 const gridOverlay    = document.getElementById('gridOverlay');
+const colorControl = document.getElementById('colorControl');
+
 
 let isDrawing     = false;
 let startPoint    = null;
@@ -58,8 +61,9 @@ const brushStyleControl = document.getElementById('brushStyleControl');
 
 function updateUI() {
   fontSizeControl.style.display = (activeTool === 'text') ? 'flex' : 'none';
-  thicknessControl.style.display = (activeTool === 'text' || activeTool === 'fill') ? 'none' : 'flex';
+  thicknessControl.style.display = (activeTool === 'text'  ||activeTool === 'fill') ? 'none' : 'flex';
   brushStyleControl.style.display = (activeTool === 'brush') ? 'flex' : 'none';
+  colorControl.style.display = 'flex';
 }
 
 
